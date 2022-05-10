@@ -1,0 +1,9 @@
+postgres:
+    config:
+        data:
+            - key: POSTGRES_DB
+              value: meals
+            - key: POSTGRES_USER
+              value: postgres
+            - key: POSTGRES_PASSWORD
+              value: password

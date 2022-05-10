@@ -1,0 +1,26 @@
+crud:
+  name: crud-api
+  group: crud
+  replicaCount: 2
+  container:
+    image: annatakcs/go-crud-api
+    tag: v1.0.1
+    imagePullpolicy: IfNotPresent
+    port: 8080
+    config: []
+    env: 
+      - name: DBHOST
+        value: "postgres"
+      - name: DBUSER
+        value: "postgres"
+      - name: DBPASSWORD
+        value: "password"
+      - name: DBNAME
+        value: "meals"
+      - name: DBSCHEMA
+        value: "meals_schema"
+      - name: DBTABLE
+        value: "meals_table"
+  service:
+    type: LoadBalancer
+    port: 8080

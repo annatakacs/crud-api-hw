@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.crud.name }}
+  labels: 
+    group: {{ .Values.crud.group }}
+spec:
+  type: {{ .Values.crud.service.type }}
+  selector:             
+    app: {{ .Values.crud.name }}
+  ports:
+    - port: {{ .Values.crud.service.port }}       
+      targetPort: {{ .Values.crud.container.port }}  
