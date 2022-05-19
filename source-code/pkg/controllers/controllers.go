@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/annatakacs/go-crud/pkg/database"
 
@@ -16,7 +17,9 @@ import (
 func RetrieveMeal(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	vars := mux.Vars(r)
+	log.Println(vars)
 	queryId := vars["id"]
+	log.Println(queryId)
 	meal, err := database.GetMeal(queryId)
 	if err == sql.ErrNoRows {
 		w.WriteHeader(http.StatusNotFound)
@@ -42,6 +45,7 @@ func RetrieveMeals(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		log.Println("Successfully returned all meals")
 	}
+	fmt.Println(mealSlice)
 
 }
 
@@ -54,13 +58,14 @@ func CreateMeal(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(message)
 		log.Println(message)
 	}
-	dbErr := database.InsertMeal(meal)
+	dbErr, id := database.InsertMeal(meal)
 	if dbErr != nil {
 		message := "Failed to insert data"
 		json.NewEncoder(w).Encode(message)
 		log.Println(message)
 	} else {
-		message := "Succesfully inserted data"
+		fmt.Printf("%d", id)
+		message := fmt.Sprintf("Succesfully inserted data with id %s", strconv.Itoa(id))
 		w.WriteHeader(http.StatusCreated)
 		json.NewEncoder(w).Encode(message)
 		log.Println(message)

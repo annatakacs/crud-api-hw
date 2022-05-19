@@ -116,16 +116,18 @@ func GetMeal(queryId string) (Meal, error) {
 	}
 }
 
-func InsertMeal(meal Meal) error {
+func InsertMeal(meal Meal) (error, int) {
 	db := DbConn()
 	price := fmt.Sprintf("%f", meal.Price)
-	query := fmt.Sprintf("INSERT INTO %s.%s (name, price, ingredients, spicy, vegan, gluten_free, description, kcal) VALUES ('%s', %s, '%s', %s, %s, %s, '%s', %s)", dbSchema, dbTable, meal.Name, price, meal.Ingredients, strconv.FormatBool(meal.Spicy), strconv.FormatBool(meal.Vegan), strconv.FormatBool(meal.GlutenFree), meal.Description, strconv.Itoa(meal.Kcal))
+	lastInsertId := 0
+	query := fmt.Sprintf("INSERT INTO %s.%s (name, price, ingredients, spicy, vegan, gluten_free, description, kcal) VALUES ('%s', %s, '%s', %s, %s, %s, '%s', %s) RETURNING id", dbSchema, dbTable, meal.Name, price, meal.Ingredients, strconv.FormatBool(meal.Spicy), strconv.FormatBool(meal.Vegan), strconv.FormatBool(meal.GlutenFree), meal.Description, strconv.Itoa(meal.Kcal))
 	_, err := db.Exec(query)
+	_ = db.QueryRow(query).Scan(&lastInsertId)
 	defer db.Close()
 	if err != nil {
-		return err
+		return err, -1
 	} else {
-		return nil
+		return nil, lastInsertId
 	}
 }
 
