@@ -92,7 +92,7 @@ func ModifyMeal(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(output)
 	} else {
 		w.WriteHeader(http.StatusOK)
-		output := fmt.Sprintf("Succesfully updated row")
+		output := fmt.Sprintf("Row has succesfully been updated")
 		log.Println(output)
 		json.NewEncoder(w).Encode(output)
 	}
